@@ -1,0 +1,38 @@
+{
+    "builders": [
+      {
+        "disk_size_gb": 10,
+        "disk_type": "network-hdd",
+        "folder_id": "b1gh8bteigivrl6bj21r",
+        "image_description": "CentOS",
+        "image_name": "centos-7-base",
+        "instance_cores": 2,
+        "instance_core_fraction": 5,
+        "instance_mem_gb": 2,
+        "preemptible": true,
+        "source_image_family": "centos-7",
+        "ssh_port": 22,
+        "ssh_timeout": "{{user `timeout`}}",
+        "ssh_username": "{{user `username`}}",
+        "subnet_id": "e9bn7iaa3mirsph04oua",
+        "token": "^-^",
+        "type": "yandex",
+        "use_ipv4_nat": true,
+        "zone": "ru-central1-a"
+      }
+    ],
+    "provisioners": [
+      {
+        "inline": [
+          "echo 'hello from packer'",
+          "sudo yum install tmux htop lnav vim -y"
+        ],
+        "type": "shell"
+      }
+    ],
+    "variables": {
+      "timeout": "3m",
+      "username": "ya-cloud"
+    }
+  }
+  
