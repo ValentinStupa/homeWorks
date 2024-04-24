@@ -14,9 +14,9 @@ Curl:
 Docker attach:
 ![Attach](./screenshots/task3.1-attach.png)
 Change port v1:
-![Change port](./screenshots/task3.2-change-port.png)
-Change port v2(*):
-![Change port](./screenshots/task3.3-change-container-port.png)
+![Change port v1](./screenshots/task3.2-change-port.png)
+Change port v2*:
+![Change port v2](./screenshots/task3.3-change-container-port.png)
 Unavaliable container port:
 ![Unavaliable container port](./screenshots/task3.4-unavalible-container-port.png)
 Remove container:
