@@ -16,7 +16,7 @@ Curl:
 Docker attach: Я так понял, что процесс прерывается из-за подключения к контейнеру как самостоятельный процесс, как если бы выполнялы команды непосредственно в терминале.
 ![Attach](./screenshots/task3.1-attach.png)
 
-Check port after change 80-->81:
+Check port after change 80-->81:\
 ![Check port v1](./screenshots/task3.2-change-port.png)
 
 Unavaliable container port:
