@@ -13,17 +13,18 @@ Curl:
 ![Curl](./screenshots/task2.3-curl.png)
 
 ## Задача 3:
-Docker attach:
+Docker attach: Я так понял, что процесс прерывается из-за подключения к контейнеру как самостоятельный процесс, как если бы выполнялы команды непосредственно в терминале.
 ![Attach](./screenshots/task3.1-attach.png)
 
-Change port v1:
-![Change port v1](./screenshots/task3.2-change-port.png)
-
-Change port v2*:
-![Change port v2](./screenshots/task3.3-change-container-port.png)
+Check port after change 80-->81:
+![Check port v1](./screenshots/task3.2-change-port.png)
 
 Unavaliable container port:
 ![Unavaliable container port](./screenshots/task3.4-unavalible-container-port.png)
+
+
+Change port manualy*:
+![Change port v2](./screenshots/task3.3-change-container-port.png)
 
 Remove container:
 ![Remove container](./screenshots/task3.5-remove-container.png)
