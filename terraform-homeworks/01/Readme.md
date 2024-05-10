@@ -1,5 +1,5 @@
 ### Задание 1:
-1. Terraform/docker versions:
+1. Terraform/docker versions:\
 ![Terraform/docker](./screenshots/task1.1-version.png)
 2. Sensitive data:
 ![sensitive](./screenshots/task1.2-secrets.png)
