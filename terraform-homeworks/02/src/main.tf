@@ -55,6 +55,8 @@ resource "yandex_compute_instance" "platform" {
 resource "yandex_compute_instance" "platform-b" {
   name        = "vm-db-${var.vpc_platform_name-b}"
   platform_id = var.vpc_platform_id
+  zone = "ru-central1-b"
+
   resources {
     cores         = 2
     memory        = 1
