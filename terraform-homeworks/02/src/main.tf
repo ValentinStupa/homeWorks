@@ -22,7 +22,8 @@ data "yandex_compute_image" "ubuntu" {
 #---------------------------------
 resource "yandex_compute_instance" "platform" {
   #name        = "netology-develop-platform-web"
-  name = "vm-web-${var.vpc_platform_name}"
+  #name = "vm-web-${var.vpc_platform_name}"
+  name = local.web
   #platform_id = "standart-v4" #FailedPrecondition desc = Platform "standard-v4" not found(https://yandex.cloud/en/docs/compute/concepts/vm-platforms, https://terraform-provider.yandexcloud.net/Resources/compute_instance )
   #platform_id = "standard-v1"
   platform_id = var.vpc_platform_id
@@ -53,12 +54,14 @@ resource "yandex_compute_instance" "platform" {
 }
 #-----------------------------------
 resource "yandex_compute_instance" "platform-b" {
-  name        = "vm-db-${var.vpc_platform_name-b}"
+  #name        = "vm-db-${var.vpc_platform_name-b}"
+  name = local.db
   platform_id = var.vpc_platform_id
   zone = "ru-central1-b"
 
   resources {
-    cores         = 2
+    #var.hardware.
+    cores         = var.hardware
     memory        = 1
     core_fraction = 5
   }
