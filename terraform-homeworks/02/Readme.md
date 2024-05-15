@@ -12,7 +12,7 @@
 
 [Resources](https://terraform-provider.yandexcloud.net/Resources/compute_instance)
  
-5 - Ssh connect and curl
+5 - Ssh connect and curl\
 ![ssh](./screenshots/task1.5-curl.png)
 6 -
     
@@ -24,7 +24,7 @@
 ### Задание 2:
 Название в имени "vm_web_" нельзя использовать. ругается при создании
 ![vm_name](./screenshots/task2-invalid_platform_names.png)
-Принял в таком виде "vm-web-"\
+Принял в таком виде "vm-web-"
 ### Задание 3:
 [Configure second VM](./src/vms_platform.tf)
 ### Задачние 4:
