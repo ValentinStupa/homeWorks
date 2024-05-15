@@ -29,9 +29,12 @@ resource "yandex_compute_instance" "platform" {
   platform_id = var.vpc_platform_id
   resources {
     #cores         = 1 #InvalidArgument desc = the specified number of cores is not available on platform "standard-v1"; allowed core number: 2, 4
-    cores         = 2
-    memory        = 1
-    core_fraction = 5
+    #cores        = 2
+    cores         = var.hardware.platform-web.cores
+    #memory        = 1
+    memory        = var.hardware.platform-web.memory 
+    #core_fraction = 5
+    core_fraction = var.hardware.platform-web.core_fraction
   }
   boot_disk {
     initialize_params {
@@ -46,11 +49,11 @@ resource "yandex_compute_instance" "platform" {
     nat       = true
   }
 
-  metadata = {
-    serial-port-enable = 1
-    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
-  }
-
+  # metadata = {
+  #   serial-port-enable = 1
+  #   ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  # }
+  metadata = var.metadata
 }
 #-----------------------------------
 resource "yandex_compute_instance" "platform-b" {
@@ -60,10 +63,12 @@ resource "yandex_compute_instance" "platform-b" {
   zone = "ru-central1-b"
 
   resources {
-    #var.hardware.
-    cores         = var.hardware
-    memory        = 1
-    core_fraction = 5
+    #cores        = 2
+    cores         = var.hardware.platform-db.cores
+    #memory        = 1
+    memory        = var.hardware.platform-db.memory 
+    #core_fraction = 5
+    core_fraction = var.hardware.platform-db.core_fraction
   }
   boot_disk {
     initialize_params {
@@ -78,9 +83,9 @@ resource "yandex_compute_instance" "platform-b" {
     nat       = true
   }
 
-  metadata = {
-    serial-port-enable = 1
-    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
-  }
-
+  # metadata = {
+  #   serial-port-enable = 1
+  #   ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  # }
+  metadata = var.metadata
 }
