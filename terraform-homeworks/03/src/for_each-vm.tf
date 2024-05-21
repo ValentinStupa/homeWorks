@@ -17,49 +17,28 @@
 #---------------------------
 
 variable "db_specs" {
-  type = list(object({ vm_name = string, cpu = number, ram = number, disk_volume = number }))
-  default = [
-    {
-      vm_name = "main"
-      cpu     = 2
-      ram     = 2
-      #core_fraction = 10
-      disk_volume = 10
+  type = map(object({
+    vm_name       = string,
+    cpu           = number,
+    ram           = number,
+    disk_volume   = number,
+    core_fraction = number
+  }))
+  default = {
+    db1 = {
+      vm_name       = "main"
+      cpu           = 2
+      ram           = 2
+      core_fraction = 5
+      disk_volume   = 10
     },
-    {
-      vm_name = "replica"
-      cpu     = 2
-      ram     = 1
-      #core_fraction = 5
-      disk_volume = 10
+    db2 = {
+      vm_name       = "replica"
+      cpu           = 2
+      ram           = 1
+      core_fraction = 5
+      disk_volume   = 15
 
     }
-  ]
+  }
 }
-#--------------------------------
-# variable "db_specs" {
-#   type = list(object({
-#     name          = string,
-#     cpu           = number,
-#     ram           = number,
-#     core_fraction = number,
-#     disk_volume   = number
-#   }))
-#   default = [
-#     {
-#       name          = "main"
-#       cpu           = 2
-#       ram           = 2
-#       core_fraction = 10
-#       disk_volume   = 10
-#     },
-#     {
-#       name          = "replica"
-#       cpu           = 2
-#       ram           = 1
-#       core_fraction = 5
-#       disk_volume   = 10
-
-#     }
-#   ]
-# }
