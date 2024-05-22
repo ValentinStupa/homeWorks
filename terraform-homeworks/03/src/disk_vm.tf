@@ -4,7 +4,7 @@ variable "disk" {
     #name = "non-replicated-disk-name"
     size = 1
     type = "network-hdd"
-    zone = "ru-central1-b"
+    zone = "ru-central1-a"
   }
 }
 #---------------------------------------
@@ -19,13 +19,13 @@ resource "yandex_compute_disk" "empty_disk" {
 resource "yandex_compute_instance" "storage" {
   name        = "netology-develop-platform-storage"
   platform_id = var.vpc_platform_id
-  
-  # dynamic "add_disk" {
-  #   for_each = yandex_compute_disk.empty_disk
-  #   content {
-  #     disk_id = yandex_compute_disk.empty_disk[secondary_disk.name].id
-  #   }
-  # }
+  # Add new empty disks by the loop
+  dynamic "secondary_disk" {
+    for_each = yandex_compute_disk.empty_disk
+    content {
+      disk_id = yandex_compute_disk.empty_disk[secondary_disk.key].id
+    }
+  }
 
   resources {
     cores         = var.hardware.platform-web.cores
@@ -38,10 +38,6 @@ resource "yandex_compute_instance" "storage" {
       size     = 10
     }
   }
-  secondary_disk {
-    disk_id = yandex_compute_disk.empty_disk.id
-  }
-
   scheduling_policy {
     preemptible = true
   }

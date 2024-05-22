@@ -77,8 +77,27 @@ resource "yandex_compute_instance" "db" {
   }
 
 }
-
-
-# resource "yandex_compute_disk_placement_group" "this" {
-#   zone = "ru-central1-b"
+#---------------------------------------
+# resource "local_file" "ansible_host" {
+#   content = templatefile("${path.module}/ansible.tft",
+#   { webservers = yandex_compute_instance.platform.name,
+#     databases = yandex_compute_instance.db.name,
+#     storage = yandex_compute_instance.storage.name
+#   }  )
+#   filename = "${abspath(path.module)}/hosts.cfg"
 # }
+# resource "local_file" "ansible_host" {
+#   content = templatefile("${path.module}/hosts.tftpl",
+#   { 
+#     storage = yandex_compute_instance.storage.name
+#   }  )
+#   filename = "${abspath(path.module)}/hosts.cfg"
+# }
+resource "local_file" "ansible_host" {
+  content = templatefile("${path.module}/hosts.tftpl",
+  { webservers = yandex_compute_instance.platform,
+    databases = yandex_compute_instance.db,
+    storage = yandex_compute_instance.storage
+  }  )
+  filename = "${abspath(path.module)}/hosts.cfg"
+}
