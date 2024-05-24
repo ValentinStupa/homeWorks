@@ -26,7 +26,6 @@ resource "yandex_compute_instance" "storage" {
       disk_id = yandex_compute_disk.empty_disk[secondary_disk.key].id
     }
   }
-
   resources {
     cores         = var.hardware.platform-web.cores
     memory        = var.hardware.platform-web.memory
@@ -50,4 +49,3 @@ resource "yandex_compute_instance" "storage" {
     ssh-key            = local.ssh_pub
   }
 }
-#---------------------------------------

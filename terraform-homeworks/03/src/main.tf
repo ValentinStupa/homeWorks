@@ -36,8 +36,6 @@ resource "yandex_compute_instance" "platform" {
     subnet_id = yandex_vpc_subnet.develop.id
     nat       = true
   }
-
-  #metadata = var.metadata
   metadata = {
     serial-port-enable = 1
     ssh-key            = local.ssh_pub
@@ -51,7 +49,6 @@ resource "yandex_compute_instance" "db" {
   name        = "netology-develop-platform-db-${each.value.vm_name}"
   platform_id = var.vpc_platform_id
   resources {
-
     cores         = each.value.cpu
     memory        = each.value.ram
     core_fraction = each.value.core_fraction
@@ -69,8 +66,6 @@ resource "yandex_compute_instance" "db" {
     subnet_id = yandex_vpc_subnet.develop.id
     nat       = true
   }
-
-  #metadata = var.metadata
   metadata = {
     serial-port-enable = 1
     ssh-key            = local.ssh_pub
@@ -78,26 +73,39 @@ resource "yandex_compute_instance" "db" {
 
 }
 #---------------------------------------
-# resource "local_file" "ansible_host" {
-#   content = templatefile("${path.module}/ansible.tft",
-#   { webservers = yandex_compute_instance.platform.name,
-#     databases = yandex_compute_instance.db.name,
-#     storage = yandex_compute_instance.storage.name
-#   }  )
-#   filename = "${abspath(path.module)}/hosts.cfg"
-# }
-# resource "local_file" "ansible_host" {
-#   content = templatefile("${path.module}/hosts.tftpl",
-#   { 
-#     storage = yandex_compute_instance.storage.name
-#   }  )
-#   filename = "${abspath(path.module)}/hosts.cfg"
-# }
 resource "local_file" "ansible_host" {
   content = templatefile("${path.module}/hosts.tftpl",
-  { webservers = yandex_compute_instance.platform,
-    databases = yandex_compute_instance.db,
-    storage = yandex_compute_instance.storage
-  }  )
+    {
+      webservers = yandex_compute_instance.platform,
+      databases  = yandex_compute_instance.db,
+      storage    = yandex_compute_instance.storage.*
+  })
   filename = "${abspath(path.module)}/hosts.cfg"
 }
+#------------------------------------
+#It works
+# resource "local_file" "ansible_host" {
+#   content  = <<-EOT
+#   [webservers]
+#   %{~ for i in yandex_compute_instance.platform}
+#   ${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
+#   %{~ endfor}
+#   [databases]
+#   %{~ for i in yandex_compute_instance.db}
+#   ${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
+#   %{~ endfor}
+#   [storage]
+#   %{~ for i in yandex_compute_instance.storage.*}
+#   ${i["name"]}   ansible_host=${i["network_interface"][0]["nat_ip_address"]}
+#   %{~ endfor}  
+#   EOT
+#   filename = "${abspath(path.module)}/hosts.cfg"
+# }
+#-------------------------------------
+# To show "fqdn" each instance via terraform console. ! terraform apply must be done
+#>yandex_compute_instance.storage.fqdn
+#>yandex_compute_instance.platform[0].fqdn
+#>yandex_compute_instance.platform[1].fqdn
+#>yandex_compute_instance.db["db1"].fqdn
+#>yandex_compute_instance.db["db2"].fqdn
+
