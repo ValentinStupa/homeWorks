@@ -1,7 +1,6 @@
 variable "disk" {
   type = map(any)
   default = {
-    #name = "non-replicated-disk-name"
     size = 1
     type = "network-hdd"
     zone = "ru-central1-a"
@@ -23,7 +22,11 @@ resource "yandex_compute_instance" "storage" {
   dynamic "secondary_disk" {
     for_each = yandex_compute_disk.empty_disk
     content {
-      disk_id = yandex_compute_disk.empty_disk[secondary_disk.key].id
+      #Обращаесмя к ресурсу, работае, но это лучший способ.
+      #disk_id = yandex_compute_disk.empty_disk[secondary_disk.key].id 
+
+      #Обращаемся к самому dynamic блок за полученными результатами. правильное использование
+      disk_id = lookup(secondary_disk.value, "id")
     }
   }
   resources {

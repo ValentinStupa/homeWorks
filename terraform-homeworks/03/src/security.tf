@@ -1,3 +1,4 @@
+# Incoming trafic for firewall rules
 variable "security_group_ingress" {
   description = "secrules ingress"
   type = list(object(
@@ -31,7 +32,7 @@ variable "security_group_ingress" {
   ]
 }
 
-
+# Outgoing trafic for firewall rules
 variable "security_group_egress" {
   description = "secrules egress"
   type = list(object(

@@ -33,8 +33,9 @@ resource "yandex_compute_instance" "platform" {
     preemptible = true
   }
   network_interface {
-    subnet_id = yandex_vpc_subnet.develop.id
-    nat       = true
+    subnet_id          = yandex_vpc_subnet.develop.id
+    nat                = true
+    security_group_ids = [yandex_vpc_security_group.example.id]
   }
   metadata = {
     serial-port-enable = 1
@@ -63,8 +64,9 @@ resource "yandex_compute_instance" "db" {
     preemptible = true
   }
   network_interface {
-    subnet_id = yandex_vpc_subnet.develop.id
-    nat       = true
+    subnet_id          = yandex_vpc_subnet.develop.id
+    nat                = true
+    security_group_ids = [yandex_vpc_security_group.example.id]
   }
   metadata = {
     serial-port-enable = 1
@@ -73,6 +75,7 @@ resource "yandex_compute_instance" "db" {
 
 }
 #---------------------------------------
+#Вариант использования с шаблоном
 resource "local_file" "ansible_host" {
   content = templatefile("${path.module}/hosts.tftpl",
     {
@@ -83,7 +86,7 @@ resource "local_file" "ansible_host" {
   filename = "${abspath(path.module)}/hosts.cfg"
 }
 #------------------------------------
-#It works
+#Вариант использования без шаблона.
 # resource "local_file" "ansible_host" {
 #   content  = <<-EOT
 #   [webservers]
@@ -108,4 +111,11 @@ resource "local_file" "ansible_host" {
 #>yandex_compute_instance.platform[1].fqdn
 #>yandex_compute_instance.db["db1"].fqdn
 #>yandex_compute_instance.db["db2"].fqdn
+
+# To show 'security_group_ids'
+#> yandex_compute_instance.db["db1"].network_interface[0].security_group_ids
+#> yandex_compute_instance.db["db2"].network_interface[0].security_group_ids
+#> yandex_compute_instance.platform[0].network_interface[0].security_group_ids
+#> yandex_compute_instance.platform[1].network_interface[0].security_group_ids
+
 

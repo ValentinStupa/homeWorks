@@ -1,6 +1,10 @@
+#   Весь закомментированный код оставлен для личных целей.
 ### Задание 1:
 Security groups:
-![security](./screenshots/security_group_YC.png)
+![security](./screenshots/secure_group_YC_id.png)
+Assign the security group to VM:
+![assign](./screenshots/security_group_console.png)
+![vm_DB](./screenshots/secure_group_DB-YC.png)
 ----
 ### Задание 2:
 1. Cout VM:
@@ -15,6 +19,8 @@ Security groups:
 ![disks](./screenshots/secondary_disk-3.2.png)
 2. Attache new disk to the fresh 'storage' VM:
 [storage](./src/disk_vm.tf)
+![storage_YC](./screenshots/storage_disks-YC.png)
+![storage_state](./screenshots/storage_disks-state.png)
 ----
 ### Задание 4:
 1. Ansible inventory:
