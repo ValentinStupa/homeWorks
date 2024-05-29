@@ -1,9 +1,9 @@
 #   Весь закомментированный код оставлен для личных целей.
 ### Задание 1:
-Security groups:
-![security](./screenshots/secure_group_YC_id.png)
-Assign the security group to VM:
-![assign](./screenshots/security_group_console.png)
+Security groups:\
+![security](./screenshots/secure_group_YC_id.png)\
+Assign the security group to VM:\
+![assign](./screenshots/security_group_console.png)\
 ![vm_DB](./screenshots/secure_group_DB-YC.png)
 ----
 ### Задание 2:
