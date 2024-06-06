@@ -1,3 +1,5 @@
+## To generate use:
+```docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.18.0 markdown /terraform-docs```
 ## Requirements
 
 | Name | Version |
