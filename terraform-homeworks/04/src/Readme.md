@@ -1,3 +1,20 @@
+## Задание 1:
+* Nginx state:\
+![nginx](./screenshots/cloud.init-nginx.png)
+* VM state:\
+![vm_state1](./screenshots/state_show-1.png)
+![vm_state2](./screenshots/state_show-2.png)
+## Задание 2:
+* Create network module:
+[code](./modules/vpc/)
+* Terraform console:\
+![module](./screenshots/show_module_output.png)
+## Задание 3:
+* Remove/Import resources:\
+![rm_imp1](./screenshots/rm-import_resurces-1.png)
+![rm_imp2](./screenshots/rm-import_resurces-2.png)
+
+##
 ## To generate use:
 ```docker run --rm --volume "$(pwd):/terraform-docs" -u $(id -u) quay.io/terraform-docs/terraform-docs:0.18.0 markdown /terraform-docs```
 ## Requirements
