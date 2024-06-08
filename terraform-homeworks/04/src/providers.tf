@@ -12,8 +12,8 @@ terraform {
     key      = "terraform.tfstate"
     region   = "ru-central1"
 
-    dynamodb_table    = "tfstate-lock" #таблица блокировок
-    dynamodb_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gth1tvcjpc968p7dh9/etnhcvbvi6i7vhtv758m"
+    dynamodb_table    = "tfstate-lock"  #таблица блокировок
+    dynamodb_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gth1tvcjpc968p7dh9/etnhcvbvi6i7vhtv758m" # можно получить при создании таблицы
 
     skip_region_validation      = true
     skip_credentials_validation = true
