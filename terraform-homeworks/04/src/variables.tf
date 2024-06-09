@@ -31,37 +31,47 @@ variable "vpc_name" {
   description = "VPC network&subnet name"
 }
 
-###common vars
-
-variable "vms_ssh_root_key" {
-  type        = string
-  default     = "your_ssh_ed25519_key"
-  description = "ssh-keygen -t ed25519"
-}
-
-###example vm_web var
-variable "vm_web_name" {
-  type        = string
-  default     = "netology-develop-platform-web"
-  description = "example vm_web_ prefix"
-}
-
-###example vm_db var
-variable "vm_db_name" {
-  type        = string
-  default     = "netology-develop-platform-db"
-  description = "example vm_db_ prefix"
-}
 #----------------------
 variable "username" {
   type        = string
   default     = "valentins"
   description = "User name"
+  validation {
+    condition     = contains(["valentins"], var.username)
+    error_message = "Invalid username"
+  }
 }
 
 variable "package" {
   type        = string
   default     = "nginx"
   description = "Packages"
+  validation {
+    condition     = contains(["nginx"], var.package)
+    error_message = "Invalid package "
+  }
 }
+#------------------------
+variable "ip" {
+  type        = string
+  default     = "192.168.0.1"
+  description = "Ip address"
+  validation {
+    condition     = can(regex("[0-9]{3}.[0-9]{3}.[0-9].[0-9]", var.ip))
+    error_message = "Wrong ip address"
+  }
 
+}
+# https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
+variable "range_ip" {
+  type = list(string)
+  #default = ["192.168.0.1", "1.1.1.1", "127.0.0.1"]
+  default     = ["192.168.0.1", "1.1.1.1", "1270.0.0.1"]
+  description = "Range of Ip's"
+  validation {
+    #condition     = can([for ip in var.range_ip : regex("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", ip)])
+    condition     = can([for ip in var.range_ip : regex("^([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})$", ip)])
+    error_message = "Wrong IPs range"
+  }
+
+}
