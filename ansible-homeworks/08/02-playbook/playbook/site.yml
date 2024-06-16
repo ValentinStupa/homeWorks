@@ -1,0 +1,105 @@
+---
+- name: Install Clickhouse
+  hosts: clickhouse
+  handlers:
+    - name: Start clickhouse service
+      become: true
+      ansible.builtin.service:
+        name: clickhouse-server
+        state: restarted
+  tasks:
+    - block:
+        - name: Get clickhouse distrib
+          ansible.builtin.get_url:
+            # yamllint disable-line rule:line-length
+            url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.noarch.rpm"
+            dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
+          with_items: "{{ clickhouse_packages }}"
+      rescue:
+        - name: Get clickhouse distrib
+          ansible.builtin.get_url:
+            # yamllint disable-line rule:line-length
+            url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
+            dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+    - name: Install clickhouse packages
+      become: true
+      vars:
+        disable_yum_gpg_check: true
+      ansible.builtin.yum:
+        name:
+          - clickhouse-common-static-{{ clickhouse_version }}.rpm
+          - clickhouse-client-{{ clickhouse_version }}.rpm
+          - clickhouse-server-{{ clickhouse_version }}.rpm
+        state: present
+        disable_gpg_check: "{{ disable_yum_gpg_check | d(omit) }}"
+      notify: Start clickhouse service
+    - name: Flush handlers
+      meta: flush_handlers
+    - name: Create database
+      ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
+      register: create_db
+      failed_when: create_db.rc != 0 and create_db.rc !=82
+      changed_when: create_db.rc == 0
+# yamllint disable-line rule:comments
+#--------------------------------------
+- name: Install Vector
+  hosts: vector
+  tasks:
+    - name: Get vector distrib
+      become: true
+      ansible.builtin.get_url:
+        # yamllint disable-line rule:line-length
+        url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_version }}-x86_64-unknown-linux-musl.tar.gz"
+        dest: "./vector-{{ vector_version }}-x86_64-unknown-linux-musl.tar.gz"
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+    - name: Untar Archive and Create dirs
+      become: true
+      shell: |
+        mkdir {{ vector_dir }}
+        mkdir {{ vector_sys_dir }}
+        mkdir {{ data_dir }}
+        chown root:root {{ vector_sys_dir }} {{ data_dir }}
+        tar -xzf vector-{{ vector_version }}-x86_64-unknown-linux-musl.tar.gz -C {{ vector_dir }}
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+    - name: Create systemd Unit
+      become: true
+      template:
+        src: ./teamplates/vector_unit.j2
+        dest: /etc/systemd/system/vector.service
+        owner: root
+        group: root
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+    - name: Copy  bin file
+      become: true
+      shell: |
+        cp -av {{ vector_dir }}/vector-x86_64-unknown-linux-musl/bin/vector /usr/bin/
+        chown root:root /etc/systemd/system/vector.service
+        chown root:root /usr/bin/vector
+        systemctl daemon-reload
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+    - name: Push a new vector.yaml config file
+      template:
+        src: ./teamplates/vector_conf.j2
+        dest: "{{ vector_sys_dir }}/vector.yaml"
+        backup: yes
+        owner: root
+        group: root
+      notify:
+        - Restart vector
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+    - name: Ensure vector is running
+      ansible.builtin.service:
+        name: vector
+        state: started
+    # yamllint disable-line rule:comments
+    #--------------------------------------
+  handlers:
+    - name: Restart vector
+      ansible.builtin.service:
+        name: vector
+        state: restarted
