@@ -35,3 +35,4 @@ A new release of ansible-lint is available: 6.22.2 → 24.6.0
 
 ## 8 - Ansible --diff 2
 ![diff2](./playbook/screenshots/8.ansible-diff_2.png)
+##
