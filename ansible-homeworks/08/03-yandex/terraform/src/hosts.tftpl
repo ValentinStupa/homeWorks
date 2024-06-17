@@ -1,0 +1,12 @@
+[clickhouse]
+%{for i in clickhouse} 
+${i["network_interface"][0]["nat_ip_address"]} ansible_user=almalinux ansible_ssh_private_key_file=~/.ssh/dev_study
+%{~endfor}
+[vector]
+%{for i in vector}
+${i["network_interface"][0]["nat_ip_address"]} ansible_user=almalinux ansible_ssh_private_key_file=~/.ssh/dev_study
+%{~endfor}
+[lighthouse]
+%{for i in lighthouse}
+${i["network_interface"][0]["nat_ip_address"]} ansible_user=almalinux ansible_ssh_private_key_file=~/.ssh/dev_study
+%{~endfor}
