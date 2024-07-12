@@ -34,8 +34,8 @@
   `DOCKER_HOST: "tcp://docker:2375"`\
   `DOCKER_TLS_CERTDIR: ""`\
   \
-Чтобы не было ошибки https при логине в регистри нужно прописать это:\
-`{ "insecure-registries": ["10.80.3.1", "10.80.3.1:5050", "10.80.3.1:5000", "10.80.3.1:8080", "10.80.3.1:8443", "10.80.3.1:8888", "localhost:32000"] }`\
+Чтобы не было ошибки https при логине в регистри нужно прописать это(заменить на ваш ip):\
+`{ "insecure-registries": ["your_IP", "your_IP:5050", "your_IP:5000", "your_IP:8080", "your_IP:8443", "your_IP:8888", "localhost:32000"] }`\
 В файл `/etc/docker/daemon.json`. Если нет, создать и перегрузить службу\
 \
 [Чтобы докер могу пушить в регистри](https://gitlab.com/gitlab-org/gitlab/-/issues/20810) нужно добавить в путь к `/etc/docker/daemon.json` в конфиге раннера `/etc/gitlab-runner/config.toml`\
