@@ -1,0 +1,28 @@
+stages: # List of stages for jobs, and their order of execution
+  - build
+  - deploy
+image: docker:20.10.5
+services:
+  - docker:20.10.5-dind
+variables: # not strictly needed, depending on runner configuration
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+
+builder:
+  stage: build
+  script:
+    - docker build -t python-api:latest .
+  except:
+    - main
+
+deployer:
+  stage: deploy
+  script:
+    - echo $CI_REGISTRY
+    - echo $CI_REGISTRY_USER
+    - echo $CI_REGISTRY_PASSWORD
+    - docker build -t $CI_REGISTRY/root/task12/python-api:latest .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $CI_REGISTRY/root/task12/python-api:latest
+  only:
+    - main
