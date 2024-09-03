@@ -74,3 +74,15 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_instance_information"></a> [instance\_information](#output\_instance\_information) | n/a |
+
+## Дополнииельные проверки sonar-scaner для языка Java
+- В корне вашего проекта создать файл "sonar-project.properties" с содержимым:
+```sonar.java.source=1.8
+#sonar.projectKey=runner
+sonar.projectName=qatest
+sonar.projectVersion=1.0
+sonar.sources=src
+sonar.java.binaries=/path_to_your_java_code/app/src
+sonar.language=java 
+sonar.dynamicAnalysis=false
+sonar.sourceEncoding=UTF-8 
