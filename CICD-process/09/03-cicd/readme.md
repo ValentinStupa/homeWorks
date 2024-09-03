@@ -77,7 +77,8 @@ No modules.
 
 ## Дополнииельные проверки sonar-scaner для языка Java
 - В корне вашего проекта создать файл "sonar-project.properties" с содержимым:
-```sonar.java.source=1.8
+```
+sonar.java.source=1.8
 #sonar.projectKey=runner
 sonar.projectName=qatest
 sonar.projectVersion=1.0
