@@ -1,14 +1,14 @@
 # Домашнее задание:"Введение в K8s/kubectl"
 1. MicroK8s:\
-![microk8s](./screenshots/microk8s_status.png)
+![microk8s](./screenshots/microk8s_status.png)\
 Dashboard:\
-![dashboard](./screenshots/enable_dashboard.png)
+![dashboard](./screenshots/enable_dashboard.png)\
 Generate certs:\
-![generate_certs](./screenshots/generate_certs.png)
+![generate_certs](./screenshots/generate_certs.png)\
 2. Kubectl version:\
-![kubectl](./screenshots/kubectl_version.png)
+![kubectl](./screenshots/kubectl_version.png)\
 Port-Forward:
-![port-forward](./screenshots/dashboard_port-forward.png)
+![port-forward](./screenshots/dashboard_port-forward.png)\
 ---
 \
 Отчет:
