@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    env: test
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: myapp # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool
+  labels:
+    env: test
+    app: main
+    tiers: network-tools
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: myapp # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          #image: praqma/network-multitool
+          # ports:
+          #   - containerPort: 1180
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  selector:
+    #app.kubernetes.io/name: httpd
+    app: myapp # Select pods with those labels
+  ports:
+    - name: app-listner
+      protocol: TCP
+      port: 80 # Port on proxy
+      targetPort: 80 # Port on pods
+  type: NodePort

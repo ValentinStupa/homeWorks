@@ -1,0 +1,60 @@
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    env: test
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  replicas: 1 # tells deployment to run 1 pod matching the template
+  template:
+    metadata:
+      #name: myapp-pod-init
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: workdir
+              mountPath: /usr/share/nginx/html
+      # These containers are run during pod initialization
+      initContainers:
+        - name: init-container
+          image: busybox:1.28
+          command:
+            - wget
+            - "-O"
+            - "/work-dir/index.html"
+            - http://info.cern.ch
+          volumeMounts:
+            - name: workdir
+              mountPath: "/work-dir"
+      dnsPolicy: Default
+      volumes:
+        - name: workdir
+          emptyDir: {}
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: myapp-service
+# spec:
+#   selector:
+#     app: myapp # Select pods with those labels
+#   ports:
+#     - name: app-listner
+#       protocol: TCP
+#       port: 80 # Port on proxy
+#       targetPort: 80 # Port on pods
+#   type: NodePort
