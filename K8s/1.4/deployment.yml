@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx-multitool
   labels:
     env: test
     app: main
@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: myapp
-  replicas: 3 # tells deployment to run 2 pods matching the template
+  replicas: 1 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
@@ -24,30 +24,10 @@ spec:
           ports:
             - containerPort: 80
               name: nginx-port
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: multitool
-  labels:
-    env: test
-    app: main
-    tiers: network-tools
-    owner: VStupa
-spec:
-  selector:
-    matchLabels:
-      app: myapp
-  replicas: 3 # tells deployment to run 2 pods matching the template
-  template:
-    metadata:
-      labels:
-        app: myapp # Service(Proxy) will look for those Pods labels
-    spec:
-      containers:
         - name: multitool
           imagePullPolicy: IfNotPresent
-          image: wbitt/network-multitool
+          #image: wbitt/network-multitool
+          image: praqma/network-multitool:minimal
           ports:
             - containerPort: 8080
               name: multitool-port
@@ -62,16 +42,12 @@ spec:
   ports:
     - name: nginx-http
       protocol: TCP
-      #port: 9001 # Port on proxy
-      port: 80
-      #targetPort: nginx-port # Port on pods
-      nodePort: 30000
+      port: 9001 # Port on proxy
+      targetPort: nginx-port # Port on pods
     - name: multitool-http
       protocol: TCP
-      #port: 9002
-      port: 8080
-      #targetPort: multitool-port
-      nodePort: 31000
-  type: NodePort
+      port: 9002
+      targetPort: multitool-port
+  #type: NodePort
   #type: ClusterIP
   #type: LoadBalancer
