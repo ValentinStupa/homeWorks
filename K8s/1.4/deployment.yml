@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: myapp
-  replicas: 1 # tells deployment to run 2 pods matching the template
+  replicas: 3 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
@@ -28,9 +28,12 @@ spec:
           imagePullPolicy: IfNotPresent
           #image: wbitt/network-multitool
           image: praqma/network-multitool:minimal
-          ports:
-            - containerPort: 8080
-              name: multitool-port
+          env:
+            - name: "HTTP_PORT"
+              value: "8080"
+          # ports:
+          #   - containerPort: 8080
+          #     name: multitool-port
 ---
 apiVersion: v1
 kind: Service
@@ -47,7 +50,7 @@ spec:
     - name: multitool-http
       protocol: TCP
       port: 9002
-      targetPort: multitool-port
+      targetPort: 8080 #multitool-port
   #type: NodePort
   #type: ClusterIP
   #type: LoadBalancer

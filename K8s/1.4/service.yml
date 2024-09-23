@@ -7,8 +7,18 @@ spec:
   selector:
     app: myapp # Select pods with those labels
   ports:
-    - name: app-listner
+    - name: nginx-http
       protocol: TCP
-      port: 80 # Port on proxy
-      targetPort: 80 # Port on pods
+      #port: 9001 # Port on proxy
+      port: 80
+      #targetPort: nginx-port # Port on pods
+      nodePort: 30000
+    - name: multitool-http
+      protocol: TCP
+      #port: 9002
+      port: 8080
+      #targetPort: multitool-port
+      nodePort: 31000
   type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
