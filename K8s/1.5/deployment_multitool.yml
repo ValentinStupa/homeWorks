@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool
+  labels:
+    env: test
+    app: main
+    tiers: backend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: backend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+          # env:
+          #   - name: "HTTP_PORT"
+          #     value: "8080"
+          volumeMounts:
+            - name: workdir
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: workdir
+          configMap:
+            name: html-conf-back
+          # ports:
+          #   - containerPort: 8080
+          #     name: multitool-port
+---
+# This action to replace a default index.html of nginx web server.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: html-conf-back
+data:
+  index.html: |
+    <html>
+    <body>
+      <h1>Hello from Backend</h1>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: multitool-service
+spec:
+  selector:
+    app: backend # Select pods with those labels
+  ports:
+    - name: multitool-http
+      protocol: TCP
+      port: 80
+      # targetPort: 8080 #multitool-port
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer

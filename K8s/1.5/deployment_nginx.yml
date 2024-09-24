@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    env: test
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: frontend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-port
+          volumeMounts:
+            - name: workdir
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: workdir
+          configMap:
+            name: html-conf
+---
+# This action to replace a default index.html of nginx web server.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: html-conf
+data:
+  index.html: |
+    <html>
+    <body>
+      <h1>Hello from Frontend</h1>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-nginx
+spec:
+  selector:
+    app: frontend # Select pods with those labels
+  ports:
+    - name: nginx-http
+      protocol: TCP
+      port: 80 # Port on proxy
+      targetPort: nginx-port # Port on pods
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
