@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: multitool
+  namespace: default
+  labels:
+    env: test
+    app: main
+    tiers: backend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      name: multitool
+  template:
+    metadata:
+      labels:
+        name: multitool
+    spec:
+      containers:
+        - name: multitool
+          image: praqma/network-multitool:minimal
+          # resources:
+          #   limits:
+          #     memory: 200Mi
+          #   requests:
+          #     cpu: 100m
+          #     memory: 200Mi
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
+      # it may be desirable to set a high priority class to ensure that a DaemonSet Pod
+      # preempts running Pods
+      # priorityClassName: important
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: varlog
+          hostPath:
+            path: /var/log
