@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool-busybox
+  labels:
+    env: test
+    app: main
+    tiers: backend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: backend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+          volumeMounts:
+            - name: workdir
+              mountPath: /opt/
+        - name: busybox
+          imagePullPolicy: IfNotPresent
+          image: busybox
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "while [ 1 ]; do echo `date` >> /opt/log_file.log; sleep 5s; done"
+          volumeMounts:
+            - name: workdir
+              mountPath: /opt/
+      volumes: # This volume are shared for two containers
+        - name: workdir
+          persistentVolumeClaim:
+            claimName: app-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+  namespace: default
+spec:
+  storageClassName: local-storage
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: backend # Select pods with those labels
+  ports:
+    - name: multitool-http
+      protocol: TCP
+      port: 80
+      # targetPort: 8080 #multitool-port
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer

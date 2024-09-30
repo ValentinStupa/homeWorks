@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+  labels:
+    env: test
+    app: main
+    tiers: network-tools
+    owner: VStupa
+spec:
+  containers:
+    - name: multitool
+      imagePullPolicy: IfNotPresent
+      image: praqma/network-multitool:minimal
+      volumeMounts:
+        - name: workdir
+          mountPath: /opt/
+  volumes: # This volume are shared for two containers
+    - name: workdir
+      persistentVolumeClaim:
+        claimName: app-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+  namespace: default
+spec:
+  storageClassName: "microk8s-hostpath"
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
