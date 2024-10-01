@@ -15,7 +15,7 @@ spec:
       image: praqma/network-multitool:minimal
       volumeMounts:
         - name: workdir
-          mountPath: /opt/
+          mountPath: /opt/data
   volumes: # This volume are shared for two containers
     - name: workdir
       persistentVolumeClaim:
@@ -27,8 +27,8 @@ metadata:
   name: app-pvc
   namespace: default
 spec:
-  storageClassName: "microk8s-hostpath"
-  volumeMode: Filesystem
+  storageClassName: nfs-csi
+  #storageClassName: nfs
   accessModes:
     - ReadWriteOnce
   resources:
