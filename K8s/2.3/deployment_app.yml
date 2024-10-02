@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-multitool
+  labels:
+    env: develop
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: frontend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: nginx-port
+          volumeMounts:
+            - name: workdir-nginx
+              mountPath: /usr/share/nginx/html
+        #-----------------------
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+          env:
+            # - name: "ConfigMapVar"
+            #   valueFrom:
+            #     configMapKeyRef:
+            #       name: html-conf-multitool
+            #       key: port
+            - name: "HTTP_PORT"
+              value: "8080"
+          volumeMounts:
+            - name: workdir-multitool
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: workdir-nginx
+          configMap:
+            name: html-conf-nginx
+        - name: workdir-multitool
+          configMap:
+            name: html-conf-multitool
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: frontend # Select pods with those labels
+  ports:
+    - name: nginx-http                                            
+      protocol: TCP
+      #port: 9001 # Port on proxy
+      port: 80
+      #targetPort: nginx-port # Port on pods
+      nodePort: 30000
+    - name: multitool-http
+      protocol: TCP
+      #port: 9002
+      port: 8080
+      #targetPort: 8080 #multitool-port
+      nodePort: 31000
+  type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
