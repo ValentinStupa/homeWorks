@@ -1,7 +1,10 @@
 # Решение к домашнему заданию: "Управление доступом"
 * [Role](./role.yml)
 * [RoleBinding](./role-binding.yml)\
-![Role](./screenshots/roles.png)
+![Role](./screenshots/roles.png)\
+![RoleList](./screenshots/roles-list.png)\
+![Delete](./screenshots/delete.png)
+
 ---
 Создание сертификатов для нового пользователя "netology"(ca.crt/ca/key -- взять с кластера k8s):
 ```
@@ -17,4 +20,8 @@
  Присвоить кластер новому пользователю:
  ```
  kk config set-context netology --cluster=microk8s-cluster --user=netology
+ ```
+ Включить поддержку RBAC в microk8s
+ ```
+ microk8s enable rbac
  ```
