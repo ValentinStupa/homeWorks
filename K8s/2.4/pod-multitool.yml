@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multitool
+  labels:
+    env: test
+    app: main
+    tiers: network-tools
+    owner: VStupa
+    # spec:
+    #   selector:
+    #     matchLabels:
+    #       app: myapp
+    #   #replicas: 2 # tells deployment to run 2 pods matching the template
+    #  template:
+    #metadata:
+    #  labels:
+    #    app: myapp # Service(Proxy) will look for those Pods labels
+spec:
+  containers:
+    - name: multitool
+      image: wbitt/network-multitool
+      imagePullPolicy: IfNotPresent
