@@ -1,6 +1,7 @@
 # Решение к домашнему заданию: "Управление доступом"
 * [Role](./role.yml)
-* [RoleBinding](./role-binding.yml)
+* [RoleBinding](./role-binding.yml)\
+![Role](./screenshots/roles.png)
 ---
 Создание сертификатов для нового пользователя "netology"(ca.crt/ca/key -- взять с кластера k8s):
 ```
