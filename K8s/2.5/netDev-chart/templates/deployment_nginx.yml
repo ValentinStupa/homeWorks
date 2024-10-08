@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-{{ .Values.env }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    env: {{ .Values.env }}
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: {{ .Values.name }}
+          image: {{ .Values.image }}:{{ .Values.tag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.port }}
+              name: nginx-port

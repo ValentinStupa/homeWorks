@@ -1,0 +1,8 @@
+---
+namespace: app1
+env: dev
+name: nginx
+image: nginx
+tag: latest
+port: 80
+replicas: 2

@@ -1,0 +1,7 @@
+namespace: app2
+env: prod
+name: nginx
+image: nginx
+tag: 1.21.0
+port: 80
+replicas: 2
