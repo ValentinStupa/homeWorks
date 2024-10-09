@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-nginx
+spec:
+  selector:
+    app: frontend # Select pods with those labels
+  ports:
+    - name: nginx-http
+      protocol: TCP
+      port: {{ .Values.serv.port }}
+      targetPort: nginx-port # Port on pods
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer

@@ -1,0 +1,19 @@
+---
+#namespace: app1
+env: dev
+name: nginx
+image: nginx
+tag: 1.21.0
+port: 80
+replicas: 2
+#----------
+serv:
+  port: 80
+#----------
+#namespace: app2
+# env: prod
+# name: nginx
+# image: nginx
+# tag: 1.21.0
+# port: 80
+# replicas: 2
