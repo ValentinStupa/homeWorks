@@ -1,0 +1,126 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool-frontend
+  namespace: app
+  labels:
+    env: test
+    app: main
+    tiers: frontend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: frontend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-frontend
+  namespace: app
+spec:
+  selector:
+    app: frontend # Select pods with those labels
+  ports:
+    - name: multitool-http
+      protocol: TCP
+      port: 80
+      # targetPort: 8080 #multitool-port
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool-backend
+  namespace: app
+  labels:
+    env: test
+    app: main
+    tiers: backend
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: backend # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-backend
+  namespace: app
+spec:
+  selector:
+    app: backend # Select pods with those labels
+  ports:
+    - name: multitool-http
+      protocol: TCP
+      port: 80
+      # targetPort: 8080 #multitool-port
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multitool-cache
+  namespace: app
+  labels:
+    env: test
+    app: main
+    tiers: cache
+    owner: VStupa
+spec:
+  selector:
+    matchLabels:
+      app: cache
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: cache # Service(Proxy) will look for those Pods labels
+    spec:
+      containers:
+        - name: multitool
+          imagePullPolicy: IfNotPresent
+          image: praqma/network-multitool:minimal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-cache
+  namespace: app
+spec:
+  selector:
+    app: cache # Select pods with those labels
+  ports:
+    - name: multitool-http
+      protocol: TCP
+      port: 80
+      # targetPort: 8080 #multitool-port
+  #type: NodePort
+  #type: ClusterIP
+  #type: LoadBalancer
