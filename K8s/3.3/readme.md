@@ -9,7 +9,7 @@ The Namespace "App" is invalid: metadata.name: Invalid value: "App": a lowercase
 ```
 * [Deployment manifest file](./deployment.yml)
 * [K8s network policy -- deny All](deny_all.yml)
-    - Deny All traffics: 
+    - Deny All traffics:\
     ![denyAll](./screenshots/deny-all.png)
 
 * [K8s network policy -- allow specific pods](allow.yml)
