@@ -1,0 +1,26 @@
+#cloud-config
+users:
+  - name: ${username}
+    groups: sudo
+    shell: /bin/bash
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_authorized_keys:
+      - ${ssh_pub}
+package_update: true
+package_upgrade: false
+packages:             #   Установка пакета
+  - ${packages}
+# runcmd:             #   Запуск простых команд
+#   - "export pub_IPv4=$(curl ifconfig.me)" # создали временную переменную окружения "pub_IPv4, равной значению внещнего адреса, полученного командой curl"
+#   - "echo Instance:$(hostname), IP Address: $pub_IPv4 > /var/www/html/index.html"
+write_files:          #   Записать что-то в файл
+  - path: /var/www/html/index.html
+    content: |
+      <!DOCTYPE html>
+      <html>
+      <body>
+      <img src="https://storage.yandexcloud.net/terraform-image/photo_2024-11-05_16-27-52.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJEI0doKJswaZpfoKZj3YSL%2F20241106%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20241106T055541Z&X-Amz-Expires=86400&X-Amz-Signature=3DCDDD03706F4C6E90D3F380471620C3C989650B81A326739966A8314F24D492&X-Amz-SignedHeaders=host" alt="Cat" />
+      </body>
+      </html>
+    owner: "root:root"
+    permissions: "0644"
